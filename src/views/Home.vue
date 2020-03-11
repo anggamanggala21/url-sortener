@@ -5,7 +5,7 @@
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 20 1440 320"><path fill="#3742fa" fill-opacity="1" d="M0,224L80,192C160,160,320,96,480,69.3C640,43,800,53,960,53.3C1120,53,1280,43,1360,37.3L1440,32L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z"></path></svg>
     </div>
 
-    <div class="row" style="width: 100%; margin-top: -5vh">
+    <div class="row" style="width: 100%; margin-top: -5vh; z-index: 9999 !important">
       <div class="col-lg-6 col-md-8 col-11 mx-auto">
         <h1 class="text-title mb-3">Url Shortener</h1>            
         <b-input-group>
@@ -15,12 +15,21 @@
           </b-input-group-append>
         </b-input-group>
         <p v-if="$store.state.isLoading" class="text-primary mt-3">Loading ...</p>
-        <p class="px-3 py-2 mt-3 bg-white result_url" style="border: 1px solid blue; overflow-x: auto" v-if="$store.state.resultUrl && $store.state.isLoading == false">{{ $store.state.resultUrl }}</p>
+
+        <div class="pl-3 pr-1 py-2 mt-3 bg-white result_url d-flex justify-content-between align-items-center" style="border: 1px solid blue; overflow-x: auto" v-if="$store.state.resultUrl && $store.state.isLoading == false">
+          <font>{{ $store.state.resultUrl }}</font>          
+          <input type="hidden" name="copyResult" id="copy-value" :value="$store.state.resultUrl">
+          <b-button class="btn-copy" variant="transparent" size="md" @click="copyResult">
+            <font class="small">copy </font>
+            <b-icon-documents></b-icon-documents>
+          </b-button>
+        </div>        
+
         <p class="px-3 py-2 mt-3 bg-white result_url" style="border: 1px solid red; overflow-x: auto" v-if="$store.state.error && $store.state.isLoading == false">{{ $store.state.error }}</p>
       </div>
     </div>
 
-    <div style="position: absolute; width: 100%; bottom: 0; left: 0">
+    <div style="position: absolute; width: 100%; bottom: 0; left: 0;">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -65 1440 320"><path fill="#3742fa" fill-opacity="1" d="M0,256L80,234.7C160,213,320,171,480,170.7C640,171,800,213,960,197.3C1120,181,1280,107,1360,69.3L1440,32L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path></svg>
     </div>
 
@@ -40,9 +49,24 @@ export default {
       this.isLoading = true
       this.$store.dispatch('generateUrl', this.url)
       .then(() => {
-        this.isLoading = false
-        console.log('Success')
+        this.isLoading = false        
       })
+    },
+    copyResult() {
+      let testingCodeToCopy = document.querySelector('#copy-value')
+      testingCodeToCopy.setAttribute('type', 'text')
+      testingCodeToCopy.select()
+
+      try {
+        var successful = document.execCommand('copy');
+        var msg = successful ? 'successful' : 'unsuccessful';
+        alert('Copy to clipboard was ' + msg);
+      } catch (err) {
+        alert('Oops, unable to copy');
+      }
+      
+      testingCodeToCopy.setAttribute('type', 'hidden')
+      window.getSelection().removeAllRanges()
     }
   }
 }
@@ -60,5 +84,15 @@ export default {
 }
 .result_url{
   border-radius: 5px;
+}
+.btn-copy:hover{
+  background: #f0f0f0;  
+}
+.btn-copy font{
+  display: none; 
+  float: left;  
+}
+.btn-copy:hover font{
+  display: block;     
 }
 </style>
