@@ -11,7 +11,7 @@
         <b-input-group>
           <input class="form-control" v-model="url" id="url" type="url" placeholder="Input url. ex: anggamanggala.com" v-on:keyup.enter="generateUrl"/>
           <b-input-group-append>          
-            <b-button @click="generateUrl" variant="outline-primary"><b-icon-arrow-right></b-icon-arrow-right></b-button>
+            <b-button @click="generateUrl" variant="outline-primary" aria-label="Generate Url"><b-icon-arrow-right></b-icon-arrow-right></b-button>
           </b-input-group-append>
         </b-input-group>
         <p v-if="$store.state.isLoading" class="text-primary mt-3">Loading ...</p>
@@ -19,7 +19,7 @@
         <div class="pl-3 pr-1 py-2 mt-3 bg-white result_url d-flex justify-content-between align-items-center" style="border: 1px solid blue; overflow-x: auto" v-if="$store.state.resultUrl && $store.state.isLoading == false">
           <font>{{ $store.state.resultUrl }}</font>          
           <input type="hidden" name="copyResult" id="copy-value" :value="$store.state.resultUrl">
-          <b-button class="btn-copy" variant="transparent" size="md" @click="copyResult">
+          <b-button aria-label="Copy Url" class="btn-copy" variant="transparent" size="md" @click="copyResult">
             <font class="small">copy </font>
             <b-icon-documents></b-icon-documents>
           </b-button>
